@@ -16,6 +16,16 @@ constexpr uintptr_t offset_func_getCDRecordObj = 0x81D260;
 //E8 ?? ?? ?? ?? 80 38 00 74 16
 //第一个指令就是callxxx，取到这个xxx
 
+constexpr uintptr_t offset_func_moveToPoint = 0x83F920;
+//C7 44 24 18 00 00 00 00 8B 44 24 18 66 0F D6 0A 89 42 08 E8
+//最后一个指令就是callxxx，取到这个xxx
+
+constexpr uintptr_t MinHook_SkillTypeCheck = 0x87A2B0;
+//E8 ?? ?? ?? ?? 83 C4 04 84 C0 74 5A 8B 87 24 03 00 00 第一个call
+
+constexpr uintptr_t MinHook_TrySelectSkillTarget = 0x7A98C0;
+//E8 ?? ?? ?? ?? 83 F8 FF 74 81 3D FF FF FF 7F 第一个call
+
 //********************************************
 
 //.text:                 mov     ecx, [eax + 8]
@@ -191,6 +201,28 @@ constexpr SignatureDefinition kSignatureTable[] =
         // 这条反过来：call 在【第一个】字节，所以偏移是 0。
         "offset_func_getCDRecordObj",
         "E8 ?? ?? ?? ?? 80 38 00 74 16",
+        SignatureKind::Function, 0, 5, 0, { nullptr, 0 }
+    },
+    {
+        // 原 offsets.h: 
+        "offset_func_moveToPoint",
+        "C7 44 24 18 00 00 00 00 8B 44 24 18 66 0F D6 0A 89 42 08 E8",
+        SignatureKind::Function, 19, 5, 0, { nullptr, 0 }
+    },
+
+    // =====================================================================
+    //  minhook 用来拦截方法
+    // =====================================================================
+    {
+        // 原 offsets.h:
+        "MinHook_SkillTypeCheck",
+        "E8 ?? ?? ?? ?? 83 C4 04 84 C0 74 5A 8B 87 24 03 00 00",
+        SignatureKind::Function, 0, 5, 0, { nullptr, 0 }
+    },
+    {
+        // 原 offsets.h: 
+        "MinHook_TrySelectSkillTarget",
+        "E8 ?? ?? ?? ?? 83 F8 FF 74 81 3D FF FF FF 7F",
         SignatureKind::Function, 0, 5, 0, { nullptr, 0 }
     },
 

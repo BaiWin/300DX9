@@ -9,6 +9,6 @@ void UpdateSlotsPanelInfo()
     WORD slot2_SKillID = *reinterpret_cast<WORD*>(skillTable + dword_SkillTable_Slot_SkillIDOffset + 0x4);
     WORD slot3_SKillID = *reinterpret_cast<WORD*>(skillTable + dword_SkillTable_Slot_SkillIDOffset + 0x8); // .text:00816704    mov     word ptr dword_1E12B28+2, ax
     g_slotsPanelInfo.skillid_Q = static_cast<int>(slot1_SKillID);
-    g_slotsPanelInfo.skillid_W = static_cast<int>(slot1_SKillID);
-    g_slotsPanelInfo.skillid_E = static_cast<int>(slot1_SKillID);
+    g_slotsPanelInfo.skillid_W = static_cast<int>(slot2_SKillID);
+    g_slotsPanelInfo.skillid_E = static_cast<int>(slot3_SKillID);
 }

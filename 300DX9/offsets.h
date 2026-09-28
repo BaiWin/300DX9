@@ -1,12 +1,12 @@
-#pragma once
+ï»¿#pragma once
 #include "300.h"
 
-//²ÎÊıÉÏ·½ÊÇ³õÊ¼ 8.28 µÄ·ÖÎö£»²ÎÊıÏÂµÄÊÇ×îĞÂ£¬°üÀ¨signature
+//å‚æ•°ä¸Šæ–¹æ˜¯åˆå§‹ 8.28 çš„åˆ†æï¼›å‚æ•°ä¸‹çš„æ˜¯æœ€æ–°ï¼ŒåŒ…æ‹¬signature
 
 //sub AF6E40   8.28
 constexpr uintptr_t offset_func_castskill = 0xAFEE60;
 //F3 0F 10 44 24 14 F3 0F 11 40 30 F3 0F 10 44 24 10 F3 0F 11 40 34 C7 40 38 00 00 00 00
-//ÕÒ·½·¨Ãû
+//æ‰¾æ–¹æ³•å
 
 //********************************************
 
@@ -15,35 +15,39 @@ constexpr uintptr_t offset_func_castSummonerSkill = 0x774460;
 //89 7D D0 89 45 C4 E8 ?? ?? ?? ?? 8B C8 E8 ?? ?? ?? ?? 83 FF FF
 
 
-// 9.24  7AB972µÄÎ»ÖÃ
+// 9.24  7AB972çš„ä½ç½®
 constexpr uintptr_t offset_func_treeFindPlayerObj = 0x601F0;
 //81 FE FF FF FF 7F 0F 84 D9 00 00 00 8D 45 A0 89 75 A0 50 8D 45 A4 8D 8F 94 00 00 00 50 E8
-// ifÉÏÃæµÄÒ»ĞĞ£¬¼´ ((void (__stdcall *)(float *, float *))aaaTreeFind_601F0)(&v178, &v177); 
-// ¾ÍÊÇº¯Êı 601F0
+// ifä¸Šé¢çš„ä¸€è¡Œï¼Œå³ ((void (__stdcall *)(float *, float *))aaaTreeFind_601F0)(&v178, &v177); 
+// å°±æ˜¯å‡½æ•° 601F0
 /*
-// base = Ä£¿é»ùÖ·
+// base = æ¨¡å—åŸºå€
 typedef void* (__thiscall *TFindLowerBound)(void* thisP94, void* out12, const uint32_t* key);
 
-uint32_t* id  = (uint32_t*)(P + 0x7C);          // ĞüÍ£ ID
-uint8_t   out[12] = {0};                        // 12 ×Ö½Ú£¬ÇåÁã
+uint32_t* id  = (uint32_t*)(P + 0x7C);          // æ‚¬åœ ID
+uint8_t   out[12] = {0};                        // 12 å­—èŠ‚ï¼Œæ¸…é›¶
 void*     node = nullptr;
 
-__try {                                         // ½¨Òé°ü SEH£¬¶ÁÒ°Ö¸Õë²»»á´ø±À×Ô¼º
+__try {                                         // å»ºè®®åŒ… SEHï¼Œè¯»é‡æŒ‡é’ˆä¸ä¼šå¸¦å´©è‡ªå·±
     ((TFindLowerBound)(base + 0x601F0))((void*)(P + 0x94), out, id);
-    node = *(void**)(out + 8);                  // ¡û lower_bound ½ÚµãÔÚ +0x08
+    node = *(void**)(out + 8);                  // â† lower_bound èŠ‚ç‚¹åœ¨ +0x08
 } __except (EXCEPTION_EXECUTE_HANDLER) { node = nullptr; }
 
 void* entity;
 if (node && *(uint8_t*)((uint8_t*)node + 0x0D) == 0        // +0x0D = _Isnil
-         && *(uint32_t*)((uint8_t*)node + 0x10) == *id)    // +0x10 = key£¬±ØĞëµÈÖµ²ÅËãÃüÖĞ
-    entity = *(void**)((uint8_t*)node + 0x14);             // +0x14 = ÊµÌåÖ¸Õë
+         && *(uint32_t*)((uint8_t*)node + 0x10) == *id)    // +0x10 = keyï¼Œå¿…é¡»ç­‰å€¼æ‰ç®—å‘½ä¸­
+    entity = *(void**)((uint8_t*)node + 0x14);             // +0x14 = å®ä½“æŒ‡é’ˆ
 else
-    entity = *(void**)(P + 0x100);                         // ÓÎÏ·×Ô¼ºµÄ¶µµ×£¨Õ¼Î»ÊµÌå£©
+    entity = *(void**)(P + 0x100);                         // æ¸¸æˆè‡ªå·±çš„å…œåº•ï¼ˆå ä½å®ä½“ï¼‰
 */
 
 // 9.24
 constexpr uintptr_t offset_func_getCDRecordObj = 0x81D260;
-//E8 ?? ?? ?? ?? 80 38 00 74 16  ½øÈëÎ»ÖÃ·½·¨ÀïÃæ
+//E8 ?? ?? ?? ?? 80 38 00 74 16  è¿›å…¥ä½ç½®æ–¹æ³•é‡Œé¢
+
+//9.24
+constexpr uintptr_t offset_func_moveToPoint = 0x83F920;
+//C7 44 24 18 00 00 00 00 8B 44 24 18 66 0F D6 0A 89 42 08 E8 æœ€åä¸€ä¸ªcallå°±æ˜¯å‡½æ•°
 
 //********************************************
 
@@ -69,7 +73,7 @@ constexpr uintptr_t Trampoline_CastNormalSkillRecvCD_End = 0xAFDBD7;
 //.text:0081D67F                 call    sub_7C890
 constexpr uintptr_t Trampoline_SwitchSkill_Start = 0x824B59;
 constexpr uintptr_t Trampoline_SwitchSkill_End = 0x824B5F;
-//0F B7 C0 50 E8 ?? ?? ?? ?? 8B C8 E8 ?? ?? ?? ?? 57 50 B9  ÔÚÕâ¶ÎµÄÉÏ·½
+//0F B7 C0 50 E8 ?? ?? ?? ?? 8B C8 E8 ?? ?? ?? ?? 57 50 B9  åœ¨è¿™æ®µçš„ä¸Šæ–¹
 // New:
 //.text:00824259                 mov     eax, [esp + 10h + arg_4]
 //.text:0082425D                 mov[eax], esi
@@ -85,56 +89,64 @@ constexpr uintptr_t Trampoline_HookSendPack_End = 0x1DFAEE;
 //8B 75 08 C7 85 28 FF FF FF 00 00 00 00 85 F6 0F 84 95 0B 00 00 0F B7 46 08 89 85 1C FF FF FF
 //********************************************
 
+// 9.23
+constexpr uintptr_t MinHook_SkillTypeCheck = 0x87A2B0;
+//E8 ?? ?? ?? ?? 83 C4 04 84 C0 74 5A 8B 87 24 03 00 00 ç¬¬ä¸€ä¸ªcall
+
+// 9.23
+constexpr uintptr_t MinHook_TrySelectSkillTarget = 0x7A98C0;
+//E8 ?? ?? ?? ?? 83 F8 FF 74 81 3D FF FF FF 7F ç¬¬ä¸€ä¸ªcall
 
 //1A51398 // SUB 6E620
 constexpr uintptr_t dword_SkillTable = 0x1A6A4B8;
-//E8 ?? ?? ?? ?? 89 70 48  ½øÈëcallµÄ·½·¨Àï£¬È¡µ½×îºóreturnµÄdword
+//E8 ?? ?? ?? ?? 89 70 48  è¿›å…¥callçš„æ–¹æ³•é‡Œï¼Œå–åˆ°æœ€åreturnçš„dword
 //1A474B8
 
 //0x46EF8  // .text:00816704    mov     word ptr dword_1E12B28+2, ax   // 8.26 sub_8166A0
 constexpr uintptr_t dword_SkillTable_Slot_SkillIDOffset = 0x46F38;
-//8D 04 40 8D 04 45 DB 0D 00 00 03 C1 8B 4D F4 64 89 0D 00 00 00 00 ÏòÏÂÕÒµ½ //word ptr dword_1E12B28+2, ax µÄÉÏÃæÒ»ĞĞµÄDWORD
+//8D 04 40 8D 04 45 DB 0D 00 00 03 C1 8B 4D F4 64 89 0D 00 00 00 00 å‘ä¸‹æ‰¾åˆ° //word ptr dword_1E12B28+2, ax çš„ä¸Šé¢ä¸€è¡Œçš„DWORD
 //0x46EF4
 
 //.text:00816704    mov     word ptr dword_1E12B28+2, ax
 constexpr uintptr_t dword_CurrentProcessed_SkillID = 0x1E2D670;
-//66 8B 86 F8 6E 04 00 66 A3 ?? ?? ?? ?? B8 02 00 00 00  ÕÒHIGHWORDµÄDWORD
-//»òÕßËÑË÷8D 04 40 8D 04 45 DB 0D 00 00 03 C1£¬ÕÒÏÂÃæµÄ66 8B 86 F8 6E...
+//66 8B 86 F8 6E 04 00 66 A3 ?? ?? ?? ?? B8 02 00 00 00  æ‰¾HIGHWORDçš„DWORD
+//æˆ–è€…æœç´¢8D 04 40 8D 04 45 DB 0D 00 00 03 C1ï¼Œæ‰¾ä¸‹é¢çš„66 8B 86 F8 6E...
 //1E08CD0
 
 constexpr uintptr_t dword_Clock = 0x1A70C40;
 //E8 ?? ?? ?? ?? 80 38 00 74 39 8B 70 08 03 70 04 E8 ?? ?? ?? ?? 2B F0   v23 = v22 - aaaGetClock_1C11B0();
-// ½øÈë·½·¨ÀïÕÒdword
+// è¿›å…¥æ–¹æ³•é‡Œæ‰¾dword
 
 
-//------Íæ¼ÒÎ»ÖÃµÄ»ñÈ¡-------
+//------ç©å®¶ä½ç½®çš„è·å–-------
 //v9.11 
 constexpr uintptr_t dword_HoverStruct = 0x1A6A76C;
-//²éÕÒ1£º(¹Û²ì¹ı³ÌÔÚÕâÀï¿´)
+//æŸ¥æ‰¾1ï¼š(è§‚å¯Ÿè¿‡ç¨‹åœ¨è¿™é‡Œçœ‹)
 //53 56 6A FF 8B CD E8 ?? ?? ?? ?? B0 01 5F 5E 5D 5B 8B E5 5D C3
-//¸Ãº¯ÊıµÄÊ×²ÎÊıÒ²»áÓÃµ½dword_PlayerInfo
-//²éÕÒ2£º(È¡Æ«ÒÆÕâÀï¸ü·½±ã)
+//è¯¥å‡½æ•°çš„é¦–å‚æ•°ä¹Ÿä¼šç”¨åˆ°dword_PlayerInfo
+//æŸ¥æ‰¾2ï¼š(å–åç§»è¿™é‡Œæ›´æ–¹ä¾¿)
 //E8 ?? ?? ?? ?? 8B C8 E8 ?? ?? ?? ?? F3 0F 10 90 84 00 00 00 F3 0F 10 88 88 00 00 00 F3 0F 10 80 8C 00 00 00
-//ÕÒµ½ v23 = (_DWORD *)sub_7C890();   //DWORD ÔÚÕâÀï£¬µ½sub_7C890ÀïÕÒ
-//     v24 = (float*)sub_7ACFE0(v23);    ÕâÀï½øÈëº¯Êıºó¿ÉÒÔ¿´µ½ÊÇ+44µÄÆ«ÒÆ
-//²éÕÒ3£º
+//æ‰¾åˆ° v23 = (_DWORD *)sub_7C890();   //DWORD åœ¨è¿™é‡Œï¼Œåˆ°sub_7C890é‡Œæ‰¾
+//     v24 = (float*)sub_7ACFE0(v23);    è¿™é‡Œè¿›å…¥å‡½æ•°åå¯ä»¥çœ‹åˆ°æ˜¯+44çš„åç§»
+//æŸ¥æ‰¾3ï¼š
 //E8 ?? ?? ?? ?? 8B C8 E8 ?? ?? ?? ?? 8A 80 06 43 00 00 3A 86 06 43 00 00 74 22 EB 27
 
 
 //struct HoverHost
-//{                  // P = [[0x1A6A76C]]£¬ÓÉ 0x7C890 È¡
+//{                  // P = [[0x1A6A76C]]ï¼Œç”± 0x7C890 å–
 //    /*+0x00*/ BYTE   pad00[0x24];
-//    /*+0x24*/ int    unk24;           // È«³Ì 0£»±»ÌôÑ¡Æ÷ 0x7A9BB0 ¶Á ¡ª¡ª ²»ÊÇÊó±ê×ø±ê
-//    /*+0x28*/ int    unk28;           // Í¬ÉÏ
+//    /*+0x24*/ int    unk24;           // å…¨ç¨‹ 0ï¼›è¢«æŒ‘é€‰å™¨ 0x7A9BB0 è¯» â€”â€” ä¸æ˜¯é¼ æ ‡åæ ‡
+//    /*+0x28*/ int    unk28;           // åŒä¸Š
 //    /*+0x2C*/ BYTE   pad2C[0x7C - 0x2C];
-//    /*+0x7C*/ int    hoverId;         // ¡ï ĞüÍ£ÊµÌå ID£»0x7FFFFFFF = ÎŞÄ¿±ê      Î»ÖÃ 9.23 7AB952
-//    /*+0x40*/                         // Íæ¼Ò×Ô¼ºµÄid
-//    /*+0x44*/                         // Íæ¼Ò×Ô¼ºµÄÊµÌåÖ¸Õë
+//    /*+0x7C*/ int    hoverId;         // â˜… æ‚¬åœå®ä½“ IDï¼›0x7FFFFFFF = æ— ç›®æ ‡      ä½ç½® 9.23 7AB952
+//    /*+0x40*/                         // ç©å®¶è‡ªå·±çš„id
+//    /*+0x44*/                         // ç©å®¶è‡ªå·±çš„å®ä½“æŒ‡é’ˆ
 //    /*+0x80*/ BYTE   pad80[0x94 - 0x80];
-//    /*+0x94*/ void* entMap;          // ¡ï std::map<int,Entity*> µÄ _Myhead        Î»ÖÃ  9.23 07AB972
+//    /*+0x94*/ void* entMap;          // â˜… std::map<int,Entity*> çš„ _Myhead        ä½ç½®  9.23 07AB972
 //    /*+0x98*/ BYTE   pad98[0x100 - 0x98];
-//    /*+0x100*/ Entity* unkEntity;     // ¶µµ×ÊµÌå£ºÀàĞÍ 0xFFFF¡¢ID=0xFFFFFFFF¡¢Ñª 5000¡¢×ø±ê 162.5/163.5£»map ¿ÕÊ±±»µ±"×Ô¼º"È¡ +0x4580 bit0x40
+//    /*+0x100*/ Entity* unkEntity;     // å…œåº•å®ä½“ï¼šç±»å‹ 0xFFFFã€ID=0xFFFFFFFFã€è¡€ 5000ã€åæ ‡ 162.5/163.5ï¼›map ç©ºæ—¶è¢«å½“"è‡ªå·±"å– +0x4580 bit0x40
 //    /*+0x104*/ BYTE  pad104[...];
+//    /*+0xF5C*/ ptr commandHolder      // C7 44 24 18 00 00 00 00 8B 44 24 18 66 0F D6 0A 89 42 08 E8
 //};
 
 
@@ -146,12 +158,12 @@ constexpr uintptr_t dword_HoverStruct = 0x1A6A76C;
 
 
 
-// ¼²²½ 1F5C
-// ÉÁÏÖ 1F63
-// ÖÎÁÆ 1F5D
-// ÖØÉú 1F57
+// ç–¾æ­¥ 1F5C
+// é—ªç° 1F63
+// æ²»ç–— 1F5D
+// é‡ç”Ÿ 1F57
 
-// ¹û×Ó/ĞŞÏÉµÀ¾ß 0x42 66  ĞŞÏÉ·¢µÄ²ÛÎ»ĞÅÏ¢
+// æœå­/ä¿®ä»™é“å…· 0x42 66  ä¿®ä»™å‘çš„æ§½ä½ä¿¡æ¯
 // 0X41  65
 // 0X40  64
 
@@ -160,60 +172,177 @@ constexpr uintptr_t dword_HoverStruct = 0x1A6A76C;
 
 
 
-// TreeFind ½Úµã²¼¾Ö	_Left+0 / _Parent+4 / _Right+8 / _Color+0xC / _Isnil+0xD / key +0x10 / value +0x14
+// TreeFind èŠ‚ç‚¹å¸ƒå±€	_Left+0 / _Parent+4 / _Right+8 / _Color+0xC / _Isnil+0xD / key +0x10 / value +0x14
 
 //struct Entity
-//{                     // Êµ²â ¡İ 0x4584 ×Ö½Ú
-//    /*+0x00*/ void* pad00;           // Êµ²â 0£¨ÎŞ vtable£¬RTTI ½â²»³öÀàÃû£©
+//{                     // å®æµ‹ â‰¥ 0x4584 å­—èŠ‚
+//    /*+0x00*/ void* pad00;           // å®æµ‹ 0ï¼ˆæ—  vtableï¼ŒRTTI è§£ä¸å‡ºç±»åï¼‰
 //    /*+0x04*/ DWORD  pad04;           // 0
-//    /*+0x08*/ DWORD  pad08;           // Íæ¼Ò 0x3FA2F701 / ¼ÙÈË 0
-//    /*+0x0C*/ DWORD  pad0C[10];       // º¬ 0xFFFFFFFF¡Á4£¬Î´Äæ
-//    /*+0x34*/ DWORD  pad34;           // 15£¨ºÍ +0x528 Í¬Öµ£¬ÒÉËÆµÈ¼¶£©
+//    /*+0x08*/ DWORD  pad08;           // ç©å®¶ 0x3FA2F701 / å‡äºº 0
+//    /*+0x0C*/ DWORD  pad0C[10];       // å« 0xFFFFFFFFÃ—4ï¼Œæœªé€†
+//    /*+0x34*/ DWORD  pad34;           // 15ï¼ˆå’Œ +0x528 åŒå€¼ï¼Œç–‘ä¼¼ç­‰çº§ï¼‰
 //    /*+0x38*/ BYTE   pad38[0x3C];
-//    /*+0x74*/ float  yaw1;            // ³¯Ïò»¡¶È£¨Íæ¼Ò 4.71 / ¼ÙÈË 1.57£©
-//    /*+0x78*/ float  yaw2;            // Í¬Öµ
-//    /*+0x7C*/ float  yaw3;            // Í¬Öµ
+//    /*+0x74*/ float  yaw1;            // æœå‘å¼§åº¦ï¼ˆç©å®¶ 4.71 / å‡äºº 1.57ï¼‰
+//    /*+0x78*/ float  yaw2;            // åŒå€¼
+//    /*+0x7C*/ float  yaw3;            // åŒå€¼
 //    /*+0x80*/ float  footZ;           // 0.40
-//    /*+0x84*/ float  x;               // ¡ï µØÍ¼×ø±ê X
-//    /*+0x88*/ float  y;               // ¡ï µØÍ¼×ø±ê Y
-//    /*+0x8C*/ float  z;               // ¡ï µØÍ¼×ø±ê Z£¨0.40£©
-//    /*+0x90*/ float  yaw4;            // ³¯Ïò»¡¶È
+//    /*+0x84*/ float  x;               // â˜… åœ°å›¾åæ ‡ X
+//    /*+0x88*/ float  y;               // â˜… åœ°å›¾åæ ‡ Y
+//    /*+0x8C*/ float  z;               // â˜… åœ°å›¾åæ ‡ Zï¼ˆ0.40ï¼‰
+//    /*+0x90*/ float  yaw4;            // æœå‘å¼§åº¦
 //    /*+0x94*/ float  pad94[3];        // 0,0,0
-//    /*+0xA0*/ float  yaw5;            // Í¬ +0x90
-//    /*+0xA4*/ float  x2;              // ¡ï ×ø±êµÚ¶ş·İ¸±±¾ X
-//    /*+0xA8*/ float  y2;              // ¡ï ¸±±¾ Y
-//    /*+0xAC*/ float  z2;              // ¡ï ¸±±¾ Z
-//    /*+0xB0*/ float  range;           // 40000.0£¨ÊÓÒ°/·¶Î§£¿£©
-//    /*+0xB4*/ float  padB4;           // Íæ¼Ò 1.522 / ¼ÙÈË nan / 0
+//    /*+0xA0*/ float  yaw5;            // åŒ +0x90
+//    /*+0xA4*/ float  x2;              // â˜… åæ ‡ç¬¬äºŒä»½å‰¯æœ¬ X
+//    /*+0xA8*/ float  y2;              // â˜… å‰¯æœ¬ Y
+//    /*+0xAC*/ float  z2;              // â˜… å‰¯æœ¬ Z
+//    /*+0xB0*/ float  range;           // 40000.0ï¼ˆè§†é‡/èŒƒå›´ï¼Ÿï¼‰
+//    /*+0xB4*/ float  padB4;           // ç©å®¶ 1.522 / å‡äºº nan / 0
 //    /*+0xB8*/ BYTE   padB8[0x42D0 - 0xB8];
-//    /*+0x4036*/                        ÕóÓª£º1/2 = Á½¸öÕóÓª£¬3 = ÖĞÁ¢£¬0 = ÎŞĞ§/Î´Í¬²½     // ²»ÒªÓ²±àÂë"1 ÊÇÎÒ·½¡¢2 ÊÇµĞ·½"¡ª¡ª×Ô¼ºÕ¾ÄÄ±ß¾Í¿ÉÄÜÊÇÄÄ¸öÖµ£¬±ØĞëÄÃ×Ô¼ºµÄÊµÌåÈ¥±È¡£ // ÔÚ 0x7AB998 ´¦   9.23
-//    /*+0x42D0*/ int  hpCopy1;         // 22312£¨Íæ¼Ò£©/ 900000£¨¼ÙÈË£©¡û Äã¸øµÄÆ«ÒÆ£¬ÊÇ¶ÔµÄ
-//    /*+0x42D4*/ int  hpCopy2;         // Í¬Öµ
+//    /*+0x4036*/                        é˜µè¥ï¼š1/2 = ä¸¤ä¸ªé˜µè¥ï¼Œ3 = ä¸­ç«‹ï¼Œ0 = æ— æ•ˆ/æœªåŒæ­¥     // ä¸è¦ç¡¬ç¼–ç "1 æ˜¯æˆ‘æ–¹ã€2 æ˜¯æ•Œæ–¹"â€”â€”è‡ªå·±ç«™å“ªè¾¹å°±å¯èƒ½æ˜¯å“ªä¸ªå€¼ï¼Œå¿…é¡»æ‹¿è‡ªå·±çš„å®ä½“å»æ¯”ã€‚ // åœ¨ 0x7AB998 å¤„   9.23
+//    /*+0x42D0*/ int  hpCopy1;         // 22312ï¼ˆç©å®¶ï¼‰/ 900000ï¼ˆå‡äººï¼‰â† ä½ ç»™çš„åç§»ï¼Œæ˜¯å¯¹çš„
+//    /*+0x42D4*/ int  hpCopy2;         // åŒå€¼
 //    /*+0x42D8*/ BYTE pad42D8[0x4518 - 0x42D8];
-//    /*+0x4518*/ int  id;              // ¡ï ÊµÌå ID£¨= [P+0x94] map µÄ key£©
+//    /*+0x4518*/ int  id;              // â˜… å®ä½“ IDï¼ˆ= [P+0x94] map çš„ keyï¼‰
 //    /*+0x451C*/ BYTE pad451C[0x4580 - 0x451C];
-//    /*+0x4580*/ DWORD flags;          // Íæ¼Ò 0xFFFF0045 / ¼ÙÈË 0x00200015£»bit0x40 = ¿ÉĞĞ¶¯/¿ÉËø¶¨
-//    /*+0x4582*/ WORD  type;           // 0xFFFF Íæ¼Ò / 0x20 ¼ÙÈË / 0x19 Ğ¡±ø/ 0x17,0x1B,0x1E,0x1C,0x10 ÆäËû/½¨Öş
+//    /*+0x4580*/ DWORD flags;          // ç©å®¶ 0xFFFF0045 / å‡äºº 0x00200015ï¼›bit0x40 = å¯è¡ŒåŠ¨/å¯é”å®š
+//    /*+0x4582*/ WORD  type;           // 0xFFFF ç©å®¶ / 0x20 å‡äºº / 0x19 å°å…µ/ 0x17,0x1B,0x1E,0x1C,0x10 å…¶ä»–/å»ºç­‘
 //    /*+0x4584*/ BYTE  pad4584[0x45C0 - 0x4584];
-//    /*+0x45C0*/ void* sub45C0;        // É¸Ñ¡Æ÷ÀàĞÍ 0x1B ·ÖÖ§°Ñ &[e+0x45C0] ´«¸ø 0x1C0520
+//    /*+0x45C0*/ void* sub45C0;        // ç­›é€‰å™¨ç±»å‹ 0x1B åˆ†æ”¯æŠŠ &[e+0x45C0] ä¼ ç»™ 0x1C0520
 //    /*+0x45C4*/ BYTE  pad45C4[0x494 - 0x45C4];
-//    /*+0x494*/ float  pickX;          // Ã¿Ö¡±»É¸Ñ¡Æ÷Ğ´£¨Ê°È¡/Í¶Ó°µã X£©
+//    /*+0x494*/ float  pickX;          // æ¯å¸§è¢«ç­›é€‰å™¨å†™ï¼ˆæ‹¾å–/æŠ•å½±ç‚¹ Xï¼‰
 //    /*+0x498*/ float  pickY;
-//    /*+0x49C*/ float  depth;          // ĞüÍ£Ê±±»Ğ´£¨Íæ¼Ò 2.08 / ¼ÙÈË 1.74£©
+//    /*+0x49C*/ float  depth;          // æ‚¬åœæ—¶è¢«å†™ï¼ˆç©å®¶ 2.08 / å‡äºº 1.74ï¼‰
 //    /*+0x4A0*/ BYTE   pad4A0[0x4E4 - 0x4A0];
-//    /*+0x4E4*/ float  highlight;      // ¸ßÁÁ alpha£º1.0 / 0.5 / 0.0
+//    /*+0x4E4*/ float  highlight;      // é«˜äº® alphaï¼š1.0 / 0.5 / 0.0
 //    /*+0x4E8*/ BYTE   pad4E8[0x528 - 0x4E8];
 //    /*+0x528*/ int    lv;             // 15
 //    /*+0x52C*/ int    pad52C;         // -1
 //    /*+0x530*/ int    hpMax;          // 22312 / 900000
-//    /*+0x534*/ int    hpCur;          // ¡ï ÊµÊ±ÑªÁ¿ 22294 / 894808
+//    /*+0x534*/ int    hpCur;          // â˜… å®æ—¶è¡€é‡ 22294 / 894808
 //    /*+0x538*/ int    hpMax2;         // 22312 / 900000
-//    /*+0x53C*/ int    pad53C;         // Íæ¼Ò 200 / ¼ÙÈË 1
+//    /*+0x53C*/ int    pad53C;         // ç©å®¶ 200 / å‡äºº 1
 //    /*+0x540*/ BYTE   pad540[8];
 //    /*+0x548*/ int    pad548;         // 1
 //    /*+0x54C*/ int    pad54C;         // 120
 //    /*+0x550*/ ...
 //};
+
+
+
+//ç»“æ„â‘  æŠ€èƒ½æ•°æ®è¡¨å¯¹è±¡ G
+//
+//G([[RVA 0x1A6A4B8]] ï¼Œæ‡’åŠ è½½å•ä¾‹ï¼Œnew çš„å°ºå¯¸ 0x47880)
+//+ 0x000  map1.head      // MSVC map = {head@+0, size@+4}ï¼›ç©ºè¡¨æ—¶ head ä¸‰æŒ‡é’ˆè‡ªæŒ‡
+//+ 0x004  map1.size
+//+ 0x008  map2.head      // ctor é‡Œç¬¬äºŒä¸ªåˆå§‹åŒ–çš„å°±æ˜¯å®ƒï¼ˆ0x81C1AA lea esi,[edi+8]ï¼‰
+//+ 0x00C  map2.size
+//+ 0x014  â˜…CDè¡¨.head     // map<u16 æŠ€èƒ½id, CDè®°å½•>  â† æŸ¥CDå°±æ˜¯æŸ¥è¿™å¼ è¡¨
+//+ 0x018  CDè¡¨.size
+//+ 0x024  â˜…CDé»˜è®¤è®°å½•     // æŸ¥ä¸åˆ°æ—¶è¿”å›å®ƒï¼Œvalid=0
+//+ 0x040  int64 è¯­ä¹‰æœªç¡®è®¤  // å†™:0x81D4D0  è¯»:0x81D4E0
+//+ 0x048  dword            // å†™:0x6977DAï¼ˆdwordï¼Œä¸æ˜¯ wordï¼‰
+//+ 0x155  word             // å†™:0x6977B8
+//+ 0x46F38 u32[17]         // æ§½ä½0..16 â†’ æŠ€èƒ½idï¼ˆä½16ä½ï¼‰ï¼Œ-1 = ç©º
+//+ 0x00DDB 6å­—èŠ‚Ã—N         // æ§½ä½17..25ï¼ˆå¤©èµ‹æ§½ï¼‰
+//ä½ç½®	opcode	æ³¨é‡Š
+//0x6E653	A1 BC A4 46 02	mov eax, [0x1A6A4BC] â† å®ˆå«å…¨å±€ï¼›0x6E658 3B 86 28 00 00 00 ä¸[tls + 0x28] æ¯”ï¼Œæœªåˆå§‹åŒ–å°±æ„é€ 
+//0x6E660	A1 B8 A4 46 02	mov eax, [0x1A6A4B8] â† è¯» Gï¼ˆgetter çš„è¿”å›è·¯å¾„ï¼‰
+//0x6E6A2	68 80 78 04 00 / 0x6E6A7 C7 86 08 00 00 00 80 78 04 00	push 0x47880 / mov[esi + 8], 0x47880 â† å¯¹è±¡å°ºå¯¸ï¼ˆæ³¨æ„ï¼šè¿™ä¸ªç«‹å³æ•°åœ¨åˆ«å¤„ä¹Ÿå‡ºç° 101 æ¬¡ï¼Œè§é”šç‚¹è¡¨è¯´æ˜ï¼‰
+//0x6E6B1	E8 C5 9F 1B 01	call 0x122867B = operator new
+//0x6E6C6	E8 85 DA 7A 00	call 0x81C150 = G çš„æ„é€ å‡½æ•°ï¼ˆthiscallï¼Œecx = æ–°å¯¹è±¡ï¼‰
+//0x6E6D1	C6 45 FC 00	mov byte[ebp - 4], 0 â† å®ˆå«ç½®ä½
+//0x6E6D5	A3 B8 A4 46 02	mov[0x1A6A4B8], eax â† G å…¨å±€çš„å”¯ä¸€å†™å…¥ç‚¹
+//0x6E6E1	68 BC A4 46 02	push 0x1A6A4BC â† æ³¨å†Œææ„
+//0x81C19B	66 C7 40 0C 01 01	mov word[eax + 0xC], 0x101 â† map å“¨å…µèŠ‚ç‚¹çš„ _Color / _Isnil
+//0x81C1AA	8D 77 08	lea esi, [edi + 8] â† ç¬¬äºŒä¸ª map å¤´åœ¨ G + 8
+//0x81C1B0	6A 20	push 0x20 â† è¯¥ map çš„èŠ‚ç‚¹ = 0x20 å­—èŠ‚
+//0x81C1BF	E8 B7 C4 A0 00	call operator new
+//0x81C1C4	89 00 89 40 04	mov[eax], eax; mov[eax + 4], eax â† ç©ºè¡¨å“¨å…µè‡ªæŒ‡
+//0x6977B8	66 89 B0 55 01 00 00	mov word[eax + 0x155], si â† G + 0x155ï¼ˆeax = åˆš call getter çš„è¿”å›ï¼‰
+//0x6977DA	89 70 48	mov dword[eax + 0x48], esi â† G + 0x48
+//0x6977DD	66 83 7F 4F 02	cmp word[edi + 0x4F], 2 â† è¿™ä¸ª 0x4F æ˜¯åˆ«çš„å¯¹è±¡(edi)ï¼Œä¸æ˜¯ Gï¼Œåˆ«æ··
+//0x81D4D0	8B 44 24 04 99 89 41 40 89 51 44	å†™ G + 0x40 / +0x44ï¼ˆint64ï¼‰ï¼Œè°ƒç”¨ç‚¹ 0x6977CC
+//0x81D4E0	8B 41 40 C3	è¯» G + 0x40
+//ç»“æ„â‘¡ CD è¡¨èŠ‚ç‚¹ + CD è®°å½•
+//
+//CDNode(0x20 å­—èŠ‚)              // std::map<u16 æŠ€èƒ½id, CDè®°å½•> çš„çº¢é»‘æ ‘èŠ‚ç‚¹
+//+ 0x00  _Left
+//+ 0x04  _Parent                  // â˜…æ ¹ = [head+4]ï¼Œhead = [G+0x14]
+//+ 0x08  _Right
+//+ 0x0C  _Color
+//+ 0x0D  _Isnil                   // æŸ¥è¡¨æ—¶å…ˆåˆ¤å®ƒ
+//+ 0x10  u16 æŠ€èƒ½id(key)         // â˜…u16 **æ— ç¬¦å·**æ¯”è¾ƒ
+//+ 0x12  u16 æœªçŸ¥
+//+ 0x14  CDRecord  â˜…å†…è”ï¼Œä¸æ˜¯æŒ‡é’ˆ
+//
+//CDRecord(12 å­—èŠ‚)
+//+ 0x00  u8  valid                // è¿‡æœŸä¹Ÿä¸æ¸…é›¶ï¼Œåˆ«åªçœ‹å®ƒ
+//+ 0x01  pad[3]
+//+ 0x04  u32 å¼€å§‹ms
+//+ 0x08  u32 æ—¶é•¿ms               // â† "CDåœ¨+8" æŒ‡çš„å°±æ˜¯å®ƒ
+
+
+
+
+//ç»“æ„ è¿è¡Œæ—¶æŠ€èƒ½å¯¹è±¡ SkillRuntimeï¼ˆoperator new(0x398)ï¼Œå…± 0x398 å­—èŠ‚ï¼‰
+//åç§»      ç±»å‹          å­—æ®µ                     æ¥æº / è¯´æ˜
+//------------------------------------------------------------------------------------
+//+ 0x000    void* pVTable                  è™šè¡¨æŒ‡é’ˆ
+//+ 0x00C    u16           nSkillID         â† é…ç½® f1(nSkillID)
+//+ 0x00E    u16           nSkillLevel      â† é…ç½® f2(nLevel)
+//+ 0x010    u16                            â† é…ç½® f23(nProfessionSkillForSkillUI)
+//+ 0x012    u16                            â† é…ç½® f24(nProfessionSkillForLearnSkillUI)
+//+ 0x014    u32   â˜…â˜…â˜…   nObjectEnum ä½æ©ç    â† é…ç½® f27ï¼Œ"3;6;7" å‹å­—ç¬¦ä¸² bts è€Œæˆ
+//bit0 = è‡ªèº« bit1 = å‹æ–¹å•ä½ bit2 = å‹æ–¹å°å…µ
+//bit3 = æ•Œæ–¹å°å…µ bit4 = å‹æ–¹è‹±é›„ bit5 = é‡æ€ª
+//bit6 = æ•Œæ–¹è‹±é›„ bit7 = å»ºç­‘ / å®ˆå« bit8 = ç‚®å¡”
+//+ 0x018    u32(æ©ç åŒºç´§é‚»ï¼Œè¯­ä¹‰æœªå®š)
+//+ 0x01C    std::string(24B)             å®æµ‹æŠ€èƒ½301 -> "single_attack_attcom"
+//+ 0x07C    u8(æŸ boolï¼Œä¸Šé¢é‚£ä¸²åˆ†éš”ä¸²å¤„ç†æ—¶è¢«ç½® 0 / 1)
+//+ 0x080    std::string(24B)             â† é…ç½® f ? ï¼ˆ0x11D9EE å¤„èµ‹å€¼ï¼‰
+//+ 0x098    std::string(24B)             â† é…ç½® f ? ï¼ˆ0x11DA05 å¤„èµ‹å€¼ï¼‰
+//+ 0x0BC    std::string(24B)             â† é…ç½® f ? ï¼ˆ0x11DA1C å¤„èµ‹å€¼ï¼‰
+//+ 0x0EC    std::string(24B)             â† é…ç½® f ? ï¼ˆ0x11DA2D å¤„èµ‹å€¼ï¼‰
+//+ 0x134    std::string(24B)             â† é…ç½® f47
+//å®æµ‹æŠ€èƒ½301 -> "skill\070_mingren\s1_putonggongji\hit\tx"
+//+ 0x194    u16                             â† é…ç½® f26 nDragtoNewSkill  â˜…ä¸æ˜¯æ©ç ï¼å®æµ‹æ’ 0
+//+ 0x196    u16           nSkillActPlaySpd_Male    â† é…ç½® f29(å®æµ‹ 533 / 1200 / 800 ä¸ json é€æ¡å»åˆ)
+//+ 0x198    u16           nSkillActPlaySpd_Female  â† é…ç½® f30
+//+ 0x19C    u32           nSkillTypeForUI          â† é…ç½® f22
+//+ 0x1A0    u8            bPassive                 â† é…ç½® f25
+//+ 0x1A4    u32           nSkillColddownType       â† é…ç½® f31(å®æµ‹æ’ 0xFFFFFFFFï¼Œå­˜ç–‘)
+//+ 0x1A8    float         fAngle Ã— Ï€               â† é…ç½® f11(æŠ€èƒ½7 = 2Ï€ / æŠ€èƒ½1 = Ï€)
+//+ 0x1AC    float  â˜…â˜…â˜…   fRange  æ–½æ³•è·ç¦»          â† é…ç½® f8(0.0 / 2.2 / 4.0 / 5.0 / 6.0 / 99.0 / 999.0)
+//+ 0x1B0    float         fTargetRange             â† é…ç½® f58(å®æµ‹ 2.2 å»åˆ)
+//+ 0x1B4    float                                   â† é…ç½® f78 æ§½ï¼ˆç±»å‹çŸ›ç›¾ï¼Œæœªå†³ï¼‰
+//+ 0x1B8    u32           nCDTime                  â† é…ç½® f18
+//+ 0x1BC    u32           nPrepareTime             â† é…ç½® f17
+//+ 0x1C0    u32           nShowCounts              â† é…ç½® f93
+//+ 0x1C4    u32                                     â† é…ç½® f ? ï¼ˆ0x11DD18 å¤„ï¼Œæ¥è‡ª[esi + 0x1c]ï¼‰
+//+ 0x1C8    u32                                     â† é…ç½® f ? ï¼ˆ0x11DD21 å¤„ï¼Œæ¥è‡ª[esi + 0x20]ï¼‰
+//+ 0x1CC    u32                                     â† é…ç½® f ? ï¼ˆ0x11DD2A å¤„ï¼Œæ¥è‡ª[esi + 0x168]ï¼‰
+//+ 0x1D0    u32                                     â† é…ç½® f ? ï¼ˆ0x11DD36 å¤„ï¼Œæ¥è‡ª[esi + 0x16c]ï¼‰
+//+ 0x1E0    u8                                      â† ç”±é…ç½® f33 ç»å‡½æ•° 0xEBE80 å˜æ¢åå–ä½å­—èŠ‚
+//+ 0x1E4    u32           nSpeicalSkillFlag        â† é…ç½® f34
+//+ 0x1E8    u32   â˜…â˜…â˜…   nSkillIndication æŒ‡ç¤ºå™¨   â† é…ç½® f94 '#' å‰çš„æ•°å­—(æŠ€èƒ½403 -> 3)
+//+ 0x200    std::string   strIndicationParam       â† é…ç½® f94 '#' ä¹‹åçš„éƒ¨åˆ†
+//+ 0x210    u32(ä¸Šé¢ str çš„ size)
+//+ 0x214    u32(ä¸Šé¢ str çš„ capacityï¼› > 0xF â‡’[å¯¹è±¡ + 0x200] æ˜¯å †æŒ‡é’ˆ)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -227,35 +356,35 @@ constexpr uintptr_t dword_HoverStruct = 0x1A6A76C;
 
 
 //9.11
-constexpr uintptr_t offset_SlotStruct = 0x24F8418;  // ºöÂÔ
+constexpr uintptr_t offset_SlotStruct = 0x24F8418;  // å¿½ç•¥
 //FF 75 C4 FF 75 D0 50 E8 ? ? ? ? ? ? ? ? 8B C8 E8
 //v95 = ((__int64 (*)(void))sub_B041E0)();
 
 //9.11
-constexpr uintptr_t dword_SummonerSkillStruct = 0x1A684B8; // ºöÂÔ
+constexpr uintptr_t dword_SummonerSkillStruct = 0x1A684B8; // å¿½ç•¥
 //57 E8 ?? ?? ?? ?? 8B C8 E8 ?? ?? ?? ?? 0F B7 40 03 50 89 45 EC
 // v9 = (char *)sub_6E620();
 // v30 = *(_WORD*)(sub_824360(v9, a3) + 3);
 
 
 //sub 8166A0   8.28
-constexpr uintptr_t offset_func_getskillid = 0x81CF30;   // ºöÂÔ
+constexpr uintptr_t offset_func_getskillid = 0x81CF30;   // å¿½ç•¥
 //66 8B 86 F8 6E 04 00 66 A3 ?? ?? ?? ?? B8 02 00 00 00 66 A3 ?? ?? ?? ?? B8 NOT WORK
 //8D 04 40 8D 04 45 DB 0D 00 00 03 C1
-//ÕÒ·½·¨Ãû
+//æ‰¾æ–¹æ³•å
 
-//------Êó±ê×ø±êµÄ»ñÈ¡------
-constexpr uintptr_t dword_MousePos = 0x1AFFB30; //ºöÂÔ
+//------é¼ æ ‡åæ ‡çš„è·å–------
+constexpr uintptr_t dword_MousePos = 0x1AFFB30; //å¿½ç•¥
 //E8 ?? ?? ?? ?? 66 0F 6E 80 64 02 00 00 0F 5B C0 F3 0F 11 45 C0 E8 ?? ?? ?? ?? 66 0F 6E 80 68 02 00 00 8D 45 B8 50 0F 5B C0 
-//ÕÒµ½ v55 = (float)*(int *)(sub_66AC80() + 612); ÖĞµÄ sub_66AC80()
+//æ‰¾åˆ° v55 = (float)*(int *)(sub_66AC80() + 612); ä¸­çš„ sub_66AC80()
 
 
 // 9.11
-constexpr uintptr_t offset_func_world2Screen = 0x103A450;   // ºöÂÔ
+constexpr uintptr_t offset_func_world2Screen = 0x103A450;   // å¿½ç•¥
 //F3 0F 10 86 84 00 00 00 F3 0F 11 44 24 0C F3 0F 10 86 88 00 00 00 F3 0F 11 44 24 10 F3 0F 10 86 8C 00 00 00 C7 44 24 08 00 00 00 00 C7 44 24 04 00 00 00 00 F3 0F 11 44 24 14
 
-// World2ScreenÏà¹Ø                                         // ºöÂÔ
-constexpr uintptr_t dword_castSummnerSkillParam1Up = 0x1A68578; //F3 0F 10 86 88 00 00 00 F3 0F 11 44 24 10 F3 0F 10 86 8C 00 00 00 C7 44 24 08 00 00 00 00 C7 44 24 04 00 00 00 00 ÏÂÃæ
+// World2Screenç›¸å…³                                         // å¿½ç•¥
+constexpr uintptr_t dword_castSummnerSkillParam1Up = 0x1A68578; //F3 0F 10 86 88 00 00 00 F3 0F 11 44 24 10 F3 0F 10 86 8C 00 00 00 C7 44 24 08 00 00 00 00 C7 44 24 04 00 00 00 00 ä¸‹é¢
 constexpr uintptr_t dword_castSummnerSkillParam1 = 0x2C05C;
-constexpr uintptr_t dword_castSummnerSkillxRight = 0x1A4A0D4;  // º¯ÊıµÄ×îºóÁ½¸ö²ÎÊı xRight£¬xBottom
+constexpr uintptr_t dword_castSummnerSkillxRight = 0x1A4A0D4;  // å‡½æ•°çš„æœ€åä¸¤ä¸ªå‚æ•° xRightï¼ŒxBottom
 constexpr uintptr_t dword_castSummnerSkillxBottom = 0x1A4A0D8;

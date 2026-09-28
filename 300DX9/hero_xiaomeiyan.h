@@ -25,7 +25,9 @@ public:
 
     void ResetState() override;
 private:
+	bool HasJiQiang();
 
+	bool HasPaoDan();
 };
 
 
@@ -36,9 +38,7 @@ extern double xiaomeiyan_WSkill_JiQiang_CD;
 extern double xiaomeiyan_WSkill_Start;
 extern WORD xiaomeiyan_WSkill_ID;
 
-bool HasJiQiang();
 
-bool HasPaoDan();
 
 // 设计
 // Q技能炮弹
@@ -52,28 +52,3 @@ bool HasPaoDan();
 // 3709 地雷
 // 3708 闪光弹
 
-
-
-bool b_xiaomeiyan = false;
-
-double xiaomeiyan_WSkill_JiQiang_CD;
-double xiaomeiyan_WSkill_Start;
-WORD xiaomeiyan_WSkill_ID = 3710;
-
-bool HasJiQiang()
-{
-	if (xiaomeiyan_WSkill_ID == 3710 && xiaomeiyan_WSkill_JiQiang_CD <= 0)
-	{
-		return true;
-	}
-	return false;
-}
-
-bool HasPaoDan()
-{
-	if (xiaomeiyan_WSkill_ID != 3710)
-	{
-		return true;
-	}
-	return false;
-}

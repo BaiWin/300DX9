@@ -21,6 +21,9 @@ struct TreeFindResult          // out µÄ 12 ×Ö½Ú
 using TreeFindPlayerResult_t = TreeFindResult * (__thiscall*)(void* thisMap, TreeFindResult* out, const uint32_t* key);
 static TreeFindPlayerResult_t g_TreeFindPlayerResult = nullptr;
 
+using MoveToPoint_t = void(__thiscall*)(void* commandHolder, float firstCoordinate, float secondCoordinate, float zeroValue);
+static MoveToPoint_t g_MoveToPoint = nullptr;   // F3 0F 7E 44 24 08 A3 ?? ?? ?? ?? A1 ?? ?? ?? ?? 66 0F D6 05
+
 //using StartMoveTo 
 
 
@@ -49,6 +52,7 @@ void GameMain()
 	g_SummonerSkill = reinterpret_cast<CastSummonerSkillJJC_t>(base + offset_func_castSummonerSkill);
 	g_TreeFindPlayerResult = reinterpret_cast<TreeFindPlayerResult_t>(base + offset_func_treeFindPlayerObj);
 	g_GetCDRecordObj = reinterpret_cast<GetCDRecordObj_t>(base + offset_func_getCDRecordObj);
+	g_MoveToPoint = reinterpret_cast<MoveToPoint_t>(base + offset_func_moveToPoint);
 
 	//g_World2Screen = reinterpret_cast<World2Screen_t>(base + offset_func_world2Screen);
 	//g_GetSkillID = reinterpret_cast<GetSkillID_t>(base + offset_func_getskillid); //0x8166A0
@@ -277,6 +281,60 @@ void SwitchSkill(int esi, int edi)
 	#endif // 0
 }
 
+__declspec(naked) void Trampoline_IndicatorBlock()
+{
+	__asm {
+		cmp word ptr[eax + 0xC], 0
+
+		pushad
+		pushfd
+
+		push eax
+		call IndicatorBlock
+		add esp, 4
+
+		popfd
+		popad
+
+		ret
+	}
+}
+
+bool b_lock_Q;
+bool b_lock_W;
+bool b_lock_E;
+bool b_lock_R;
+void IndicatorBlock(int eax)
+{
+	uintptr_t skillObj = *reinterpret_cast<uintptr_t*>(eax);
+
+	int skillId = *reinterpret_cast<int*>(skillObj + 0xC);
+	float skillRange = *reinterpret_cast<int*>(skillObj + 0x1AC);
+
+	float distance = GetHoverEnemyHeroDistance();
+
+	if (skillRange < distance)
+	{
+		//send move
+	}
+
+	if (b_lock_Q && skillId == g_slotsPanelInfo.skillid_Q)
+	{
+
+	}
+	if (b_lock_W && skillId == g_slotsPanelInfo.skillid_W)
+	{
+
+	}
+	if (b_lock_E && skillId == g_slotsPanelInfo.skillid_E)
+	{
+
+	}
+	if (b_lock_R && skillId == g_slotsPanelInfo.skillid_R)
+	{
+
+	}
+}
 
 
 std::queue<CastSkillTask> castSkillTeskQueue;
@@ -582,6 +640,14 @@ float GetHoverEnemyHeroDistance()
 	OutputDebugStringA(buffer);
 
 	return dist;
+}
+
+void MoveToPoint(float x, float y)
+{
+	uintptr_t hoverStruct = *reinterpret_cast<uintptr_t*>(base + dword_HoverStruct);
+	uintptr_t commandHolder = *reinterpret_cast<uintptr_t*>(hoverStruct + 0xF5C);
+	//C7 44 24 18 00 00 00 00 8B 44 24 18 66 0F D6 0A 89 42 08 E8
+	g_MoveToPoint(reinterpret_cast<void*>(commandHolder), x, y, 0);
 }
 
 void LogicUpdate()

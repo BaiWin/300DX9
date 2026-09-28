@@ -8,7 +8,7 @@
 //  InnerVersion=1274
 //  SourceImage=D:\Game\JumpGame\300Hero\300.exe
 //  ImageBase=0x00400000
-//  GeneratedAt=2026-09-27 12:23:57
+//  GeneratedAt=2026-09-28 23:18:30
 //
 //  ★ 下面全部是【相对地址】。用的时候一律：
 //        实际地址 = 模块基址 + 这里的值
@@ -25,6 +25,9 @@ constexpr uintptr_t offset_func_castskill = 0x00AFEE60;  // 函数入口
 constexpr uintptr_t offset_func_castSummonerSkill = 0x00774460;  // 函数入口
 constexpr uintptr_t offset_func_treeFindPlayerObj = 0x000601F0;  // 函数入口
 constexpr uintptr_t offset_func_getCDRecordObj = 0x0081D260;  // 函数入口
+constexpr uintptr_t offset_func_moveToPoint = 0x0083F920;  // 函数入口
+constexpr uintptr_t MinHook_SkillTypeCheck = 0x0087A2B0;  // 函数入口
+constexpr uintptr_t MinHook_TrySelectSkillTarget = 0x007A98C0;  // 函数入口
 constexpr uintptr_t Trampoline_CastNormalSkillRecvCD_Start = 0x00AFDBD1;  // Hook 点 起点（6 字节）
 constexpr uintptr_t Trampoline_CastNormalSkillRecvCD_End = 0x00AFDBD7;    // Hook 点 终点（起点 + 6）
 constexpr uintptr_t Trampoline_SwitchSkill_Start = 0x00824B59;  // Hook 点 起点（6 字节）

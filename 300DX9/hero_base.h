@@ -26,10 +26,10 @@ public:
     virtual const char* GetName() const = 0;
 
     // 返回true，就放行，false就吞
-    virtual bool OnKeyDown(int virtualKey) {}
+    virtual bool OnKeyDown(int virtualKey) { return 1; }
 
     // 返回true，就放行，false就吞
-    virtual bool OnKeyUp(int virtualKey) {}
+    virtual bool OnKeyUp(int virtualKey) { return 1; }
 
     // 游戏切换了某个槽位的技能。
     //   selectSkillID = 这个槽位被换成了哪个技能
@@ -66,7 +66,7 @@ public:
     // 被激活、被取消激活时各调一次。
     // 把残留状态清干净：按键等待位、CD 表、缓存的技能 id。
     virtual void ResetState() {}
-private:
+protected:
     int keyflag = 0;
 };
 

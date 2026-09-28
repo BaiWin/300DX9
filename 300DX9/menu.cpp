@@ -45,21 +45,16 @@ void DrawCenterCircle()
 
 void DrawHeroSelector()
 {
-    ImGui::Text("гЂал");
+    ImGui::Text("Hero");
 
-    bool b_gelei;
-    bool b_xiaomeiyan;
-
-    if (ImGui::RadioButton("gelei", b_gelei))
+    if (ImGui::RadioButton("gelei", g_activeHero == &g_hero_gelei))
     {
         g_activeHero = &g_hero_gelei;
-        if (b_gelei && b_xiaomeiyan) b_xiaomeiyan = false;
     }
 
-    if (ImGui::RadioButton("xiaomeiyan", b_xiaomeiyan))
+    if (ImGui::RadioButton("xiaomeiyan", g_activeHero == &g_hero_xiaomeiyan))
     {
-        g_activeHero = &g_hero_gelei;
-        if (b_xiaomeiyan && b_gelei) b_gelei = false;
+        g_activeHero = &g_hero_xiaomeiyan;
     }
     if (g_activeHero)
     {

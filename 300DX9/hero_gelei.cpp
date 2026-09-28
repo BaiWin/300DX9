@@ -45,6 +45,13 @@ bool HeroGeLei::OnKeyUp(int virtualKey)
 {
     if (virtualKey == 'T')
     {
+        if (key_flags & (1 << 4))
+        {
+            castSkillTeskQueue.push({ 0 });
+            castSkillTeskQueue.push({ 1 });
+            castSkillTeskQueue.push({ 2 });
+        }
+
         key_flags &= ~(1 << 4);
     }
     return 1;
@@ -114,7 +121,7 @@ void HeroGeLei::OnReceiveSkillCooldown(int cooldownMilliseconds, int slotIndex)
 
     if (process_SkillID)
     {
-        bool isSlot1_InCD, isSlot2_InCD, isSlot3_InCD;
+        bool isSlot1_InCD = false, isSlot2_InCD = false, isSlot3_InCD = false;
 
         for (int i = 0; i < 3; ++i)
         {
@@ -143,7 +150,7 @@ void HeroGeLei::OnReceiveSkillCooldown(int cooldownMilliseconds, int slotIndex)
             }
         }
 
-        if (isSlot1_InCD && isSlot1_InCD && isSlot1_InCD)
+        if (isSlot1_InCD && isSlot2_InCD && isSlot3_InCD)
         {
             castSkillTeskQueue.push({ 4 });
         }

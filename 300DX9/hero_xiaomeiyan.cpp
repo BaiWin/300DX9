@@ -222,3 +222,27 @@ void HeroXiaoMeiYan::ResetState()
     // template_keyWaitingFlags = 0;
     // À˘”– CD «Â¡„ ...
 }
+
+
+
+double xiaomeiyan_WSkill_JiQiang_CD;
+double xiaomeiyan_WSkill_Start;
+WORD xiaomeiyan_WSkill_ID = 3710;
+
+bool HeroXiaoMeiYan::HasJiQiang()
+{
+    if (xiaomeiyan_WSkill_ID == 3710 && xiaomeiyan_WSkill_JiQiang_CD <= 0)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool HeroXiaoMeiYan::HasPaoDan()
+{
+    if (xiaomeiyan_WSkill_ID != 3710)
+    {
+        return true;
+    }
+    return false;
+}
