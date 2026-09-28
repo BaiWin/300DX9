@@ -150,10 +150,15 @@
     <ClInclude Include="cooldown.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="hero_base.h" />
     <ClInclude Include="hero_gelei.h" />
+    <ClInclude Include="hero_template.h" />
     <ClInclude Include="hero_xiaomeiyan.h" />
+    <ClInclude Include="herofunc.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="offsets.h" />
+    <ClInclude Include="game_slot.h" />
+    <ClInclude Include="user32.h" />
     <ClInclude Include="vectors.h" />
   </ItemGroup>
   <ItemGroup>
@@ -173,9 +178,14 @@
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="delayinput.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="hero_base.cpp" />
     <ClCompile Include="hero_gelei.cpp" />
+    <ClCompile Include="hero_template.cpp" />
     <ClCompile Include="hero_xiaomeiyan.cpp" />
+    <ClCompile Include="herofunc.cpp" />
     <ClCompile Include="menu.cpp" />
+    <ClCompile Include="game_slot.cpp" />
+    <ClCompile Include="user32.cpp" />
     <ClCompile Include="vectors.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

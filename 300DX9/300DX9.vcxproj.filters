@@ -45,7 +45,16 @@
     <ClInclude Include="menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="hero_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="hero_gelei.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hero_template.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="herofunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vectors.h">
@@ -64,6 +73,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\AI\offset_update.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="user32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_slot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -126,6 +141,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="hero_xiaomeiyan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="user32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hero_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hero_template.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="herofunc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_slot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

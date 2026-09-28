@@ -9,13 +9,14 @@
 //#include "offsets.h"
 #include "offset_update.h"
 #include "hero_xiaomeiyan.h"
+#include "hero_base.h"
 #include "debug.h"
+#include "user32.h"
+#include "game_slot.h"
 
 void GameMain();
 
 uint32_t CallGameFunction();
-
-void CastNormalSkillDirect(int slot_id);
 
 void ClearKeyFlag();
 
@@ -27,19 +28,17 @@ void Trampoline_CastNormalSkillRecvCD();
 
 void Trampoline_SwitchSkill();
 
-void Trampoline_SendSkill();
-
 void HookSendPack(uintptr_t eax, uintptr_t esi);
 
 void CastNormalSkillRecvCD(int ecx, int ebx);
 
 void SwitchSkill(int esi, int edi);
 
-void SendSkill(int ecx);
-
 void ProcessSkillQueue();
 
 int GetCDFromSkillTable(int skillID);
+
+extern uintptr_t base;
 
 extern int skill_ID;
 extern int skill_CD;
@@ -53,15 +52,7 @@ extern bool bClock;
 extern double clockTime;
 extern int test_GetCDFromSkillTable_Param;
 
-struct Skill
-{
-    int selectid;
-    int skillid;
-    double start;
-    double cd;
-};
 
-extern Skill gelei_skills[3][3];
 
 struct SummonnerSkillSlotInfo
 {
@@ -84,7 +75,9 @@ struct SummonnerSkillSlotInfo
 
 extern SummonnerSkillSlotInfo g_summonnerSkillSlotInfo;
 
-void UpdateCooldowns();
+double GetFrameDeltaMilliseconds();
+
+void UpdateLocalCooldowns(double deltaMilliseconds);
 
 struct CastSkillTask
 {

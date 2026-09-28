@@ -1,20 +1,16 @@
 #include "300.h"
 
-using ScreenToClient_t = BOOL(__stdcall*)(HWND hWnd, LPPOINT lpPoint);
-static ScreenToClient_t g_ScreenToClient = nullptr;
-using ClientToScreen_t = BOOL(__stdcall*)(HWND hWnd, LPPOINT lpPoint);
-static ClientToScreen_t g_ClientToScreen = nullptr;
 using World2Screen_t = char(__thiscall*)(uintptr_t a1, int a2, DWORD* a3, DWORD* a4, int a5, int a6);
 static World2Screen_t g_World2Screen = nullptr; //
+
 using CastSkill_t = unsigned __int16* (__cdecl*)(int a1,unsigned __int8 a2,unsigned __int8 a3,int a4);
 static CastSkill_t g_CastSkill = nullptr; // 
+
 using CastSummonerSkillJJC_t = char(__thiscall*)(int a1, float a2, unsigned __int16 a3, unsigned __int16 a4);
 static CastSummonerSkillJJC_t g_SummonerSkill = nullptr; //
-//using TreeFindPlayerObj_t = DWORD* (__thiscall*)(int* thisptr, DWORD* a2, unsigned int* a3);
-//static TreeFindPlayerObj_t g_TreeFindPlayerObj = nullptr;   // 参数(p+0x94, out, id)
+
 using GetCDRecordObj_t = DWORD* (__thiscall*)(DWORD* thisptr, int a2);
 static GetCDRecordObj_t g_GetCDRecordObj = nullptr;   // 参数(E8 ?? ?? ?? ?? 68 71 1E 00 00, id)
-
 
 struct TreeFindResult          // out 的 12 字节
 {
@@ -22,8 +18,10 @@ struct TreeFindResult          // out 的 12 字节
 	uint32_t  flag;            // +0x04  0/1：是否记过 lower_bound
 	uintptr_t lowerBound;      // +0x08  ★ 这个才是要用的节点
 };
-using TreeFindPlayerObj_t = TreeFindResult * (__thiscall*)(void* thisMap, TreeFindResult* out, const uint32_t* key);
-static TreeFindPlayerObj_t g_TreeFindPlayerObj = nullptr;
+using TreeFindPlayerResult_t = TreeFindResult * (__thiscall*)(void* thisMap, TreeFindResult* out, const uint32_t* key);
+static TreeFindPlayerResult_t g_TreeFindPlayerResult = nullptr;
+
+//using StartMoveTo 
 
 
 //using CastSummonerSkill1_t = char(__thiscall*)(char** a1, unsigned __int16 a2, unsigned int a3, __int64 a4, float a5, int a6, char a7);
@@ -33,15 +31,7 @@ uintptr_t base;
 
 // 8.28 dump
 
-void InitUser32()
-{
-	HMODULE hUser32 = GetModuleHandleA("user32.dll");
-	if (hUser32)
-	{
-		g_ClientToScreen = (ClientToScreen_t)GetProcAddress(hUser32, "ClientToScreen");
-		g_ScreenToClient = (ScreenToClient_t)GetProcAddress(hUser32, "ScreenToClient");
-	}
-}
+
 
 
 void GameMain()
@@ -57,7 +47,7 @@ void GameMain()
 
 	g_CastSkill = reinterpret_cast<CastSkill_t>(base + offset_func_castskill);
 	g_SummonerSkill = reinterpret_cast<CastSummonerSkillJJC_t>(base + offset_func_castSummonerSkill);
-	g_TreeFindPlayerObj = reinterpret_cast<TreeFindPlayerObj_t>(base + offset_func_treeFindPlayerObj);
+	g_TreeFindPlayerResult = reinterpret_cast<TreeFindPlayerResult_t>(base + offset_func_treeFindPlayerObj);
 	g_GetCDRecordObj = reinterpret_cast<GetCDRecordObj_t>(base + offset_func_getCDRecordObj);
 
 	//g_World2Screen = reinterpret_cast<World2Screen_t>(base + offset_func_world2Screen);
@@ -98,7 +88,7 @@ uint32_t CallGameFunction()
 }
 
 
-void CastNormalSkillDirect(int slot_id)
+void CastNormalSkill(int slot_id)
 {
 	if (slot_id <= 4 && g_CastSkill)
 	{
@@ -210,93 +200,15 @@ int skill_CD;
 void CastNormalSkillRecvCD(int ecx, int ebx)    //注意自动转好的技能服务器不会下发，但手动重置技能会下发，并且cd = 0
 {
 	skill_CD = ecx;
-	int slot_Index = ebx;
-	int skill_Time = ecx;
+	int skill_cd = ecx;
+	int slot_index = ebx;
 
-
-	if (b_gelei)
+	if (g_activeHero)
 	{
-		DebugPrint("CastNormalSkillRecvCD --- 1");
-
-		if (g_CastSkill)
-		{
-			uintptr_t skillTable = *reinterpret_cast<uintptr_t*>(base + dword_SkillTable);  // 0x1A51398
-			WORD slot1_SKillID = *reinterpret_cast<WORD*>(skillTable + dword_SkillTable_Slot_SkillIDOffset + 0x0);
-			WORD slot2_SKillID = *reinterpret_cast<WORD*>(skillTable + dword_SkillTable_Slot_SkillIDOffset + 0x4);
-			WORD slot3_SKillID = *reinterpret_cast<WORD*>(skillTable + dword_SkillTable_Slot_SkillIDOffset + 0x8); // .text:00816704    mov     word ptr dword_1E12B28+2, ax
-
-			WORD process_SkillID = *reinterpret_cast<WORD*>(base + dword_CurrentProcessed_SkillID + 0x2); // 当前要处理的技能id,也是其中一个slot的id  // 0x1E12B28  
-			//和上面一行一样的，来源于 .text:00816704    mov     word ptr dword_1E12B28+2, ax
-
-			DebugPrint("CastNormalSkillRecvCD --- 2");
-
-			if (process_SkillID)
-			{
-				bool isSlot1_InCD = false;
-				bool isSlot2_InCD = false;
-				bool isSlot3_InCD = false;
-
-				for (int i = 0; i < 3; ++i)
-				{
-					for (int j = 0; j < 3; ++j)
-					{
-						Skill& skill = gelei_skills[i][j];
-
-						if (skill.skillid == process_SkillID)
-						{
-							skill.cd = static_cast<double>(skill_Time);
-							//return;
-						}
-
-						if (skill.skillid == slot1_SKillID && skill.cd > 0)
-						{
-							isSlot1_InCD = true;
-						}
-						if (skill.skillid == slot2_SKillID && skill.cd > 0)
-						{
-							isSlot2_InCD = true;
-						}
-						if (skill.skillid == slot3_SKillID && skill.cd > 0)
-						{
-							isSlot3_InCD = true;
-						}
-					}
-				}
-
-				if (isSlot1_InCD && isSlot1_InCD && isSlot1_InCD)
-				{
-					if (g_CastSkill)
-					{
-						//unsigned __int16* result = g_CastSkill(4, 0, 256, 1);//T
-						castSkillTeskQueue.push({ 4 }); // 上面的和下面的这个都可以
-					}
-				}
-			}
-			DebugPrint("CastNormalSkillRecvCD --- 3");
-		}
+		g_activeHero->OnReceiveSkillCooldown(skill_cd, slot_index);
 	}
-	else if (b_xiaomeiyan)
-	{
-		if (slot_Index == 1)     // 仅释放E会触发这里
-		{
-			xiaomeiyan_WSkill_JiQiang_CD = static_cast<double>(skill_CD);
-			// E和Q都会触发recv cd
-			//uintptr_t skillBase = *reinterpret_cast<uintptr_t*>(base + offset_SkillBase);  // 0x1A51398
-			//WORD slot2_SKillID = *reinterpret_cast<WORD*>(skillBase + dword_NormalSkillIDOffset + 0x4);
-			WORD process_SkillID = *reinterpret_cast<WORD*>(base + dword_CurrentProcessed_SkillID + 0x2);
-			xiaomeiyan_WSkill_ID = process_SkillID;
-
-			if (key_flags & (1 << 2) && process_SkillID == 3710 && skill_CD == 0) //是否按下E 且收到的是机枪
-			{
-				key_flags &= ~(1 << 2);
-
-				if (g_CastSkill)
-				{
-					castSkillTeskQueue.push({ 1 });
-				}
-			}
-		}
-	}
+	#if 0
+	#endif // 0
 }
 
 //.text:00AFD11A                 mov     ecx, [eax + 4]
@@ -357,117 +269,12 @@ void SwitchSkill(int esi, int edi)
 	int select_id = esi;
 	int slot_id = edi;
 
-	if (b_gelei)
+	if (g_activeHero)
 	{
-		if (key_flags & (1 << 4))
-		{
-			return;
-		}
-
-		DebugPrint("SwitchSkill --- 1");
-
-
-		if (select_id && slot_id < 3)
-		{
-			for (int i = 0; i < 3; ++i)
-			{
-				for (int j = 0; j < 3; ++j)
-				{
-					Skill& skill = gelei_skills[i][j];
-
-					if (skill.skillid == select_id)
-					{
-						key_flags &= ~(1 << slot_id); //收到包，代表已经选择了，这个时候解锁一下键盘，以防bug
-						return;               //这个函数的调用处就是服务器下发对槽位的设置，切技能会设置槽位，选择技能也会设置槽位。
-					}                         //而我只需要切技能时候的id，所以屏蔽调选择技能时的id
-
-					if (skill.selectid == select_id)
-					{
-						/*char buffer[128];
-
-						sprintf_s(
-							buffer,
-							sizeof(buffer),
-							"seletcID = (%u)\n",
-							select_id
-						);*/
-
-						//OutputDebugStringA(buffer);
-
-						// 选择要切换的技能
-						if (skill.cd == 0 && slot_id < 3)  // 技能不在cd，就准备调用切技能，并且启用键盘
-						{
-							if (g_CastSkill)
-							{
-								//unsigned __int16* result = g_CastSkill(slot_id, 0, 0, 1);
-								key_flags &= ~(1 << slot_id);
-								castSkillTeskQueue.push({ slot_id }); // 下一帧统一进行，因为hook的方法里是解包赋值的方法，后面还有UI处理
-							}
-						}
-						else if (skill.cd > 0 && slot_id < 3) // 根据我自己保存的cd列表，如果当前切的技能在cd，就禁用键盘
-						{
-							key_flags |= 1 << slot_id;
-						}
-
-						return;
-					}
-				}
-			}
-		}
-
-		DebugPrint("SwitchSkill --- 2");
+		g_activeHero->OnSwitchSkill(select_id, slot_id);
 	}
-	else if (b_xiaomeiyan)
-	{
-		if (slot_id == 1)
-		{
-			xiaomeiyan_WSkill_ID = select_id; // 每次切技能都更新一下W的id
-		}
-		if (key_flags & (1 << 0) && xiaomeiyan_WSkill_ID != 3710)  // QW 连招 // 按下Q一定会切技能 // 并且一定是炮弹
-		{
-			key_flags &= ~(1 << 0);
-
-			if (g_CastSkill)
-			{
-				castSkillTeskQueue.push({ 1 });
-			}
-		}
-		if (key_flags & (1 << 2) && xiaomeiyan_WSkill_ID == 3710)  // E
-		{
-			key_flags &= ~(1 << 2);
-
-			if (g_CastSkill)
-			{
-				castSkillTeskQueue.push({ 1 });
-			}
-		}
-	}
-}
-
-//.text:0081D67D                 mov     [eax], esi
-//.text:0081D67F                 call    sub_7C890
-
-__declspec(naked) void Trampoline_SendSkill()
-{
-	__asm {
-		pushad
-		pushfd
-
-		push esi
-		call SendSkill
-		add esp, 4
-
-
-		popfd
-		popad
-
-		ret
-	}
-}
-
-void SendSkill(int ecx)
-{
-	ProcessSkillQueue();
+	#if 0
+	#endif // 0
 }
 
 
@@ -488,34 +295,6 @@ void ProcessSkillQueue()
 			int slotid = task.slot_id;
 			unsigned __int16* result = g_CastSkill(slotid, 0, 256, 1);  // 第三个参数 不是0(1byte) 而是 256(4bytes)
 		}
-		
-		// 在这里处理 task
-		// 例如调用你的游戏逻辑函数
-	}
-}
-
-int PresentFPS = 0;
-void TestPresentFPS()
-{
-	static int count = 0;
-	static DWORD last = GetTickCount();
-
-	count++;
-	PresentFPS++;
-
-	DWORD now = GetTickCount64();
-
-	if (now - last >= 1000)
-	{
-		/*char buf[128];
-
-		sprintf_s(buf, "Present FPS = %d\n", count);
-
-		OutputDebugStringA(buf);*/
-
-		PresentFPS = 0;
-		count = 0;
-		last = now;
 	}
 }
 
@@ -635,38 +414,32 @@ SummonnerSkillSlotInfo g_summonnerSkillSlotInfo;
 //	OutputDebugStringA(buffer);
 //}
 
-//void CastSummonerSkill()
-//{
-//	uintptr_t playerInfo = *reinterpret_cast<uintptr_t*>(base + dword_HoverStruct);
-//	uintptr_t this_or_a1 = *reinterpret_cast<uintptr_t*>(playerInfo + 0x44);
-//
-//	//仅执行一次
-//	if (key_flags & (1 << 5))
-//	{
-//		key_flags &= ~(1 << 5);  //先置回
-//
-//		if (g_SummonerSkill && this_or_a1)
-//		{
-//			char result = g_SummonerSkill(this_or_a1, 0xFFFFFFFF, 0x1F5D, 1); // 0x1F5D=治疗
-//
-//			g_summonnerSkillSlotInfo.slot1_Hiden_D_CD = 170000 + 1000;
-//			//OutputDebugStringA("Heal！！！！！！！！！！！！！！！！！！！！！！！！！！！\n");
-//		}
-//	}
-//
-//	if (key_flags & (1 << 6))
-//	{
-//		key_flags &= ~(1 << 6);
-//
-//		if (g_SummonerSkill && this_or_a1)
-//		{
-//			char result = g_SummonerSkill(this_or_a1, 0xFFFFFFFF, 0x1F63, 1); // 0x1F63=闪现
-//
-//			g_summonnerSkillSlotInfo.slot2_Hiden_F_CD = 180000 + 1000;
-//			//OutputDebugStringA("Flash！！！！！！！！！！！！！！！！！！！！！！！！！！\n");
-//		}
-//	}
-//}
+void CastSummonerSkill()
+{
+	uintptr_t hoverStruct = *reinterpret_cast<uintptr_t*>(base + dword_HoverStruct);
+	uintptr_t player_self = *reinterpret_cast<uintptr_t*>(hoverStruct + 0x44);
+
+	if (!player_self) return;
+
+	//仅执行一次
+	if (key_flags & (1 << 5))
+	{
+		key_flags &= ~(1 << 5);  //先置回
+
+		char result = g_SummonerSkill(player_self, 0xFFFFFFFF, 0x1F5D, 1); // 0x1F5D=治疗
+
+		g_summonnerSkillSlotInfo.slot1_Hiden_D_CD = 170000;
+	}
+
+	if (key_flags & (1 << 6))
+	{
+		key_flags &= ~(1 << 6);
+
+		char result = g_SummonerSkill(player_self, 0xFFFFFFFF, 0x1F63, 1); // 0x1F63=闪现
+
+		g_summonnerSkillSlotInfo.slot2_Hiden_F_CD = 180000;
+	}
+}
 
 
 bool IsEnemyHero(uintptr_t obj)
@@ -707,10 +480,10 @@ uintptr_t GetCurrentHoverEnemyObj()
 
 	if (hoverID != 0x7FFFFFFF)
 	{
-		if (g_TreeFindPlayerObj)
+		if (g_TreeFindPlayerResult)
 		{
 			TreeFindResult res = {};      // 7AB964 9.23  // 这里不要解引用 
-			g_TreeFindPlayerObj(reinterpret_cast<void*>(hoverStruct + 0x94), &res, reinterpret_cast<uint32_t*>(&hoverID));
+			g_TreeFindPlayerResult(reinterpret_cast<void*>(hoverStruct + 0x94), &res, reinterpret_cast<uint32_t*>(&hoverID));
 			uintptr_t node = res.lowerBound;
 
 			/*char buffer[128];
@@ -787,7 +560,8 @@ int GetCDFromSkillTable(int skillID)
 	return cd;
 }
 
-float GalculateEnemyHeroDistance()
+
+float GetHoverEnemyHeroDistance()
 {
 	uintptr_t obj = GetCurrentHoverEnemyObj();
 	if (obj == 0) return 0;
@@ -812,21 +586,29 @@ float GalculateEnemyHeroDistance()
 
 void LogicUpdate()
 {
-	UpdateCooldowns();
+	// CD相关更新
+	double deltaMilliseconds = GetFrameDeltaMilliseconds();
 
-	//TestPresentFPS();
+	UpdateLocalCooldowns(deltaMilliseconds);
 
+	if (g_activeHero)
+	{
+		g_activeHero->OnFrameUpdate(deltaMilliseconds);
+	}
+
+	// 英雄在 OnFrameUpdate 里排的技能，这一帧就放出去，不拖到下一帧
 	ProcessSkillQueue();
+
+	// 召唤师技能释放相关
+	CastSummonerSkill();
+
+	// 技能面板的槽位技能id
+	UpdateSlotsPanelInfo();
+
 
 	//GetSummonnerSkillSlotInfo();
 
-	//CastSummonerSkill();
-	
 	//CastSummonerSkill1();
 
-	
-
-	GalculateEnemyHeroDistance();
-
-
+	//GetHoverEnemyHeroDistance();
 }

@@ -82,103 +82,14 @@ LRESULT CALLBACK hkWndProc(
 
     if (msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN)
     {
-        if (wParam == 'Q')
+        if (g_activeHero)
         {
-            if (b_gelei)
+            if (!g_activeHero->OnKeyDown(wParam))
             {
-                if (key_flags & (1 << 0))
-                    return 0;
-            }
-            else if (b_xiaomeiyan)
-            {
-                if (HasPaoDan())
-                {
-                    CastNormalSkillDirect(1);
-                }
-                else // 设置触发，等待技能切换，即swtich
-                {
-                    key_flags |= 1 << 0; // QW
-                }
-            }
-            
-        }
-        else if (wParam == 'W')
-        {
-            if (b_gelei)
-            {
-                if (key_flags & (1 << 1))
-                    return 0;
-            }
-            else if (b_xiaomeiyan)
-            {
-                if (HasPaoDan())
-                {
-                    CastNormalSkillDirect(1);
-                    return 0;
-                }
-            }
-            
-        }
-        else if (wParam == 'E')
-        {
-            if (b_gelei)
-            {
-                if (key_flags & (1 << 2))
-                    return 0;
-            }
-            else if (b_xiaomeiyan)
-            {
-                if (HasPaoDan())
-                {
-                    CastNormalSkillDirect(1);
-                    return 0;
-
-                    if (xiaomeiyan_WSkill_JiQiang_CD <= 0.0)  // 机枪不在cd
-                    {
-                        key_flags |= 1 << 2;  //设置触发，之后放W，等待技能切换，即swtich
-                        return 0;  // 不放E
-                    }
-                    else // 机枪在cd
-                    {
-                        key_flags |= 1 << 2; //设置触发，等待技能切换，即switch
-                                             //放E
-                    }
-                }
-                else //没有炮弹
-                {
-                    if (xiaomeiyan_WSkill_JiQiang_CD <= 0.0)  // 机枪不在cd
-                    {
-                        //CastNormalSkillDirect(1); // 直接放机枪
-                        return 0;  // 不放E
-                    }
-                    else // 机枪在cd
-                    {
-                        key_flags |= 1 << 2; //设置触发，等待技能cd，即recvCD
-                                             //放E
-                    }
-                }
-            }
-            
-        }
-        else if (wParam == 'R')
-        {
-            
-        }
-        else if (wParam == 'T')
-        {
-            if (b_gelei)
-            {
-                bool spaceDown =
-                    (GetAsyncKeyState(VK_SPACE) & 0x8000) != 0;
-
-                if (spaceDown)
-                {
-                    // Shift + T
-                    key_flags |= 1 << 4;
-                }
+                return 0;
             }
         }
-        else if (wParam == 'D' && g_summonnerSkillSlotInfo.slot1_Hiden_D_CD == 0) 
+        if (wParam == 'D' && g_summonnerSkillSlotInfo.slot1_Hiden_D_CD == 0) 
         {
             key_flags |= 1 << 5;
             //return 0;               //优先使用隐藏技能，治疗就和原技能一起瞬发了
@@ -197,11 +108,15 @@ LRESULT CALLBACK hkWndProc(
 
     if (msg == WM_KEYUP || wParam == WM_SYSKEYUP)
     {
-        if (wParam == 'T')
+        if (g_activeHero)
         {
-            key_flags &= ~(1 << 4);
+            if (!g_activeHero->OnKeyUp(wParam))
+            {
+                return 0;
+            }
         }
-        else if (wParam == 'D')
+
+        if (wParam == 'D')
         {
             key_flags &= ~(1 << 5);
         }
@@ -209,24 +124,10 @@ LRESULT CALLBACK hkWndProc(
         {
             key_flags &= ~(1 << 6);
         }
-        else if (wParam == 'E')
-        {
-            if (b_xiaomeiyan)
-            {
-                key_flags &= ~(1 << 2);
-            }
-        }
-        else if (wParam == 'Q')
-        {
-            if (b_xiaomeiyan)
-            {
-                key_flags &= ~(1 << 0);
-            }
-        }
 
         if (wParam == VK_SPACE)
         {
-            bSpace = false;
+            //bSpace = false;
         }
     }
 
@@ -347,7 +248,6 @@ HRESULT STDMETHODCALLTYPE hkPresent(
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
 
-        //DrawMenu2();
         DrawMenu();
 
         ImGui::Render();
